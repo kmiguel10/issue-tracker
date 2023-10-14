@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { Bug } from "lucide-react";
 
 export default function NavBar() {
   const links = [
@@ -8,7 +9,10 @@ export default function NavBar() {
   ];
   return (
     <nav className="flex space-x-6 border-b mb-5 px-5 h-14 items-center">
-      <Link href="/"> Logo</Link>
+      <Link href="/">
+        {" "}
+        <Bug />
+      </Link>
       <ul className="flex space-x-6">
         {links.map((link) => (
           <Link
