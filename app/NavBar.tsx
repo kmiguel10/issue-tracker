@@ -5,10 +5,12 @@ import React from "react";
 import { Bug } from "lucide-react";
 import { usePathname } from "next/navigation";
 import classnames from "classnames";
+import { useSession } from "next-auth/react";
+import { Box } from "@radix-ui/themes";
 
 export default function NavBar() {
   const currentPath = usePathname();
-  console.log(currentPath);
+  const { status, data: session } = useSession();
 
   const links = [
     { label: "Dashboard", href: "/" },
@@ -21,19 +23,28 @@ export default function NavBar() {
       </Link>
       <ul className="flex space-x-6">
         {links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={classnames({
-              "text-zinc-900": link.href === currentPath,
-              "text-zinc-500": link.href !== currentPath,
-              "hover:text-zinc-800 transition-colors": true,
-            })}
-          >
-            {link.label}
-          </Link>
+          <li key={link.href}>
+            <Link
+              href={link.href}
+              className={classnames({
+                "text-zinc-900": link.href === currentPath,
+                "text-zinc-500": link.href !== currentPath,
+                "hover:text-zinc-800 transition-colors": true,
+              })}
+            >
+              {link.label}
+            </Link>
+          </li>
         ))}
       </ul>
+      <Box>
+        {status === "authenticated" && (
+          <Link href="/api/auth/signout">Log out</Link>
+        )}
+        {status === "unauthenticated" && (
+          <Link href="/api/auth/signin">Sign in</Link>
+        )}
+      </Box>
     </nav>
   );
 }
