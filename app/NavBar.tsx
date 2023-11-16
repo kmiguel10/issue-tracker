@@ -6,7 +6,14 @@ import { Bug } from "lucide-react";
 import { usePathname } from "next/navigation";
 import classnames from "classnames";
 import { useSession } from "next-auth/react";
-import { Box, Container, Flex } from "@radix-ui/themes";
+import {
+  Avatar,
+  Box,
+  Container,
+  DropdownMenu,
+  Flex,
+  Text,
+} from "@radix-ui/themes";
 
 export default function NavBar() {
   const currentPath = usePathname();
@@ -43,7 +50,27 @@ export default function NavBar() {
           </Flex>
           <Box>
             {status === "authenticated" && (
-              <Link href="/api/auth/signout">Log out</Link>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Avatar
+                    src={session.user!.image!}
+                    fallback="?"
+                    size="2"
+                    radius="full"
+                    className="cursor-pointer"
+                  />
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  <Text size="2">
+                    <DropdownMenu.Label>
+                      {session.user!.email}
+                    </DropdownMenu.Label>
+                    <DropdownMenu.Item>
+                      <Link href="/api/auth/signout">Log out</Link>
+                    </DropdownMenu.Item>
+                  </Text>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
             )}
             {status === "unauthenticated" && (
               <Link href="/api/auth/signin">Sign in</Link>
